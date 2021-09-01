@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	function listBook(){
+		$("#list").empty();
+		$.ajax({url:"/listBook.do",success:function(data){
+			$.each(data, function(i,book){
+				let tr = $("<tr></tr>");
+				$(tr).append( $("<td></td>").html(book.bookid));
+				$(tr).append( $("<td></td>").html(book.bookname));
+				$("#list").append(tr);
+			});
+		}});
+	}
+	
+	listBook();
+	
+	$("#btnAdd").click(function(){
+		let data = $("#bookInput").serializeArray();
+		$.ajax({url:"/insertBook.do",
+			data:data,
+			success:function(data){
+				listBook();
+			}}
+		);
+	});
+	
+});
+</script>
+</head>
+<body>
+	<form id="bookInput">
+		도서번호 : <input type="text" name="bookid" id="bookid"><br>
+		도서이름 : <input type="text" name="bookname" id="bookname"><br>
+		출판사명 : <input type="text" name="publisher" id="publisher"><br>
+		도서가격 : <input type="text" name="price" id="price"><br>
+	</form>
+	<button id="btnAdd">등록</button>
+	<table  border="1" width="80%">
+		<thead>
+		<tr>
+			<th>도서번호</th>
+			<th>도서명</th>
+		</tr>
+		</thead>
+		<tbody id="list">
+		</tbody>
+	</table>
+</body>
+</html>
+
+
+
